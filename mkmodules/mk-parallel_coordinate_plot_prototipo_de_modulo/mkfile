@@ -1,0 +1,16 @@
+MKSHELL=/bin/bash
+
+## make the plot
+%.parallel_plot.svg:Q: %.evec.tmp %.eval
+	echo "[DEBUG] plotting $target"
+	## pass to R script
+	Rscript --vanilla parallel_plotter.R $prereq $target
+
+## reformat the evec file to repalce spaces
+%.evec.tmp:Q: %.evec
+	echo "[DEBUG] formatting evec file"
+	cat $prereq \
+	| tr -s " " \
+	| tr -d "#" \
+	| sed "s# ##" \
+	| sed "s# #\t#g" > $target

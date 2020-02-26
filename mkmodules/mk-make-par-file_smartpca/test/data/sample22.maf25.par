@@ -1,0 +1,8 @@
+genotypename: ./test/data/sample22.maf25.bed
+snpname: ./test/data/sample22.maf25.bim
+indivname: ./test/data/sample22.maf25.pedind
+evecoutname: ./test/data/sample22.maf25.evec
+evaloutname: ./test/data/sample22.maf25.eval
+altnormstyle: NO
+numoutlieriter: 0
+numoutevec: 20

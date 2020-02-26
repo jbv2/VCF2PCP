@@ -1,0 +1,15 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.evec:Q: %.par
+        smartpca -p $prereq
+
+%.par:Q: %.bed
+	echo "genotypename: $prereq" > $target
+	echo "snpname: $stem.bim" >> $target
+	echo "indivname: $stem.pedind" >> $target
+	echo "evecoutname: $stem.evec" >> $target
+	echo "evaloutname: $stem.eval" >> $target
+	echo "altnormstyle: NO" >> $target
+	echo "numoutlieriter: 0" >> $target
+	echo "numoutevec: $PCA_NUMBER" >> $target

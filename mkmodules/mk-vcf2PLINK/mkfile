@@ -1,0 +1,20 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.maf25.bed:Q: %.converted.bed
+	$PLINK --bfile $stem.converted \
+	--maf 0.025 \
+	--make-bed \
+	--out $stem.maf25
+
+%.converted.bed:Q: %.vcf.gz
+	$PLINK --vcf $prereq \
+	--keep-allele-order \
+	--const-fid "NAT_AMR" \
+	--biallelic-only strict \
+	--snps-only just-acgt \
+	--vcf-filter \
+	--vcf-half-call m \
+	--vcf-require-gt \
+	--make-bed \
+	--out $stem.converted

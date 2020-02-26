@@ -1,0 +1,7 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.pedind:Q: %.fam
+	echo "Exporting $TSV"
+	join -t " " -1 2 -2 1 -o 1.1,1.2,1.3,1.4,1.5,2.2  <(sort -t: -k1,1 $prereq) <(sort -t: -k2,2 $TSV) > $target
+
