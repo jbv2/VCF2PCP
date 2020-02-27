@@ -294,7 +294,7 @@ process _001_make_par_file_smartpca {
   file mk_files from mkfiles_001
 
 	output:
-	file "*.ev*" into results_001_make_par_file_smartpca
+	file "*" into results_001_make_par_file_smartpca
 
 	"""
 	export PCA_NUMBER="${params.pca_number}"
