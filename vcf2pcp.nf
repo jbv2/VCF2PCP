@@ -237,11 +237,14 @@ process _pre1_vcf2plink {
 	file mk_files from mkfiles_pre1
 
 	output:
-	file "*.maf25.*" into results_pre1_vcf2plink
-	file "*.fam" into results_FAM
+	file "*.LD.maf_filtered*" into results_pre1_vcf2plink
+	file "*.LD.maf_filtered.fam" into results_FAM
 
 	"""
   export PLINK="${params.plink}"
+	export LD="${params.ld}"
+	export WINDOW="${params.window}"
+	export MAF="${params.maf}"
 	bash runmk.sh
 	"""
 
@@ -281,7 +284,7 @@ Channel
 
 process _001_make_par_file_smartpca {
 
-	publishDir "${params.output_dir}/${pipeline_name}-results/",mode:"symlink"
+	publishDir "${params.output_dir}/${pipeline_name}-results/_001_make_par_file_smartpca/",mode:"copy"
 
 	input:
   file bed from results_pre1_vcf2plink
@@ -307,7 +310,7 @@ Channel
 
 process _post1_parallel_coordinate_plot {
 
-	publishDir "${params.output_dir}/${pipeline_name}-results/",mode:"copy"
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post1_parallel_coordinate_plot/",mode:"copy"
 
 	input:
   file evec from results_001_make_par_file_smartpca
