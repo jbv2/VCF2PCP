@@ -5,5 +5,5 @@
 find -L . \
   -type f \
   -name "*.bed" \
-| sed 's#.bed#.evec#' \
+| sed 's#.bed#.bestsnps#' \
 | xargs mk

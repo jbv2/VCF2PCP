@@ -1,10 +1,20 @@
 ## Define shell command line which will be used to run scripts.
 MKSHELL=/bin/bash
 
-%.evec:Q: %.par
-        smartpca -p $prereq
+%.bestsnps:Q: %.smartpca.stdout
+	echo "[DEBUG] Getting best snps"
+	NUMBER_OF_PC=$(grep "^## Tracy-Widom statistics" $prereq | cut -d " " -f 5)
+	grep -A $NUMBER_OF_PC "^## Tracy-Widom statistics" $prereq \
+	| tr -s " " | tr " " "\t" | sed 's#\t##' > $stem.tracy_widom_statistics
+	echo "Description PC_number Snp_id Chromosome Position Weight" | tr " " "\t" > $target
+	grep "^eigbestsnp" $prereq | tr -s " " | tr " " "\t" >> $target
+
+%.smartpca.stdout:Q: %.par
+	echo "[DEBUG] Running smartpca"
+	smartpca -p $prereq > $target
 
 %.par:Q: %.bed
+	echo "[DEBUG] Writing par file"
 	echo "genotypename: $prereq" > $target
 	echo "snpname: $stem.bim" >> $target
 	echo "indivname: $stem.pedind" >> $target
