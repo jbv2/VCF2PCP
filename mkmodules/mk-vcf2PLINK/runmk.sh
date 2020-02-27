@@ -5,5 +5,5 @@
 find -L . \
   -type f \
   -name "*.vcf.gz" \
-| sed 's#.vcf.gz#.maf25.bed#' \
+| sed 's#.vcf.gz#.LD.maf_filtered.bed#' \
 | xargs mk
