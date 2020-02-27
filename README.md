@@ -16,6 +16,7 @@ This pipeline uses PLINK. It can work with v1.9 or 2.0, but consider that v2 let
 |:---------:|:--------:|:-------------------:|
 | [bcftools](https://samtools.github.io/bcftools/) | 1.9-220-gc65ba41 | bcftools |
 | [plink](https://www.cog-genomics.org/plink/2.0/) | 1.9 & 2 | plink |
+| [Eigensoft](https://data.broadinstitute.org/alkesgroup/EIGENSOFT/) | 6.1.4 | smartpca |
 | [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html) | 19.04.1.5072 | nextflow |
 | [Plan9 port](https://github.com/9fans/plan9port) | Latest (as of 10/01/2019 ) | mk \** |
 | [R](https://www.r-project.org/) | 3.4.4 | ** See R scripts |
