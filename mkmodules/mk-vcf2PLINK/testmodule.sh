@@ -3,10 +3,12 @@
 
 ###
 ## environment variable setting
-export PLINK="plink"
+export PLINK="plink2"
 export LD="0.8"
 export WINDOW="2000"
 export MAF="0.05"
+export N_sites="2000"
+export THREADS_PLINK="4"
 ###
 
 echo "[>..] test running this module with data in test/data"

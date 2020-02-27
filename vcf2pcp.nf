@@ -245,6 +245,8 @@ process _pre1_vcf2plink {
 	export LD="${params.ld}"
 	export WINDOW="${params.window}"
 	export MAF="${params.maf}"
+	export N_sites="${params.n_sites}"
+	export THREADS_PLINK="${params.threads_plink}"
 	bash runmk.sh
 	"""
 

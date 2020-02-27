@@ -6,6 +6,7 @@ MKSHELL=/bin/bash
 	$PLINK --bfile $stem.LD.converted \
 	--maf $MAF \
 	--make-bed \
+	--threads $THREADS_PLINK \
 	--out $stem.LD.maf_filtered
 
 %.LD.converted.bed:Q: %.LD.vcf
@@ -13,12 +14,11 @@ MKSHELL=/bin/bash
 	$PLINK --vcf $prereq \
 	--keep-allele-order \
 	--const-fid "NAT_AMR" \
-	--biallelic-only strict \
-	--snps-only just-acgt \
 	--vcf-filter \
 	--vcf-half-call m \
 	--vcf-require-gt \
 	--make-bed \
+	--threads $THREADS_PLINK \
 	--out $stem.LD.converted
 
 %.LD.vcf:Q: %.simplified_2.vcf
@@ -27,6 +27,7 @@ MKSHELL=/bin/bash
 		$prereq \
 		--max-LD $LD \
     --window $WINDOW \
+		--nsites-per-win $N_sites \
 		--annotate-info STR \
 		--set-filter MAX_R2 \
                 > $target
