@@ -15,5 +15,5 @@ echo "[>>.] results will be created in test/results"
 ## Move results from test/data to test/results
 ## results files are *.bed, *.bim & *.fam
 bash runmk.sh \
-&& mv test/data/*.pedind test/results/  \
+&& mv test/data/*.pedind test/results/  && rm test/data/*.tmp \
 && echo "[>>>] Module Test Successful"
