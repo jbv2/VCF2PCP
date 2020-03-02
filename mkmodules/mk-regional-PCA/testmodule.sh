@@ -3,7 +3,7 @@
 
 ###
 ## environment variable setting
-export TSV="./test/reference/samples.txt"
+export TAG_FILE="test/reference/tag_data.tsv"
 ###
 
 echo "[>..] test running this module with data in test/data"
@@ -13,7 +13,7 @@ mkdir -p test/results
 echo "[>>.] results will be created in test/results"
 ## Execute runmk.sh, it will find the basic example in test/data
 ## Move results from test/data to test/results
-## results files are *.bed, *.bim & *.fam
+## results files are *.svg files
 bash runmk.sh \
-&& mv test/data/*.pedind test/results/ \
+&& mv test/data/*.svg test/results/ \
 && echo "[>>>] Module Test Successful"

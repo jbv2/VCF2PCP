@@ -12,16 +12,16 @@ Project repository:
 Authors:
 
 - Bioinformatics Design
- Israel Aguilar-Ordonez (iaguilaror@gmail)
  Judith Ballesteros Villascán (judith.vballesteros@gmail.com)
+ Israel Aguilar-Ordonez (iaguilaror@gmail)
 
 - Bioinformatics Development
- Israel Aguilar-Ordonez (iaguilaror@gmail)
  Judith Ballesteros Villascán (judith.vballesteros@gmail.com)
+Israel Aguilar-Ordonez (iaguilaror@gmail)
 
 - Nextflow Port
- Israel Aguilar-Ordonez (iaguilaror@gmail)
  Judith Ballesteros Villascán (judith.vballesteros@gmail.com)
+ Israel Aguilar-Ordonez (iaguilaror@gmail)
 
 =============================
 Pipeline Processes In Brief:
@@ -35,6 +35,7 @@ _001_make_par_file_smartpca
 
 Pos-processing
 _post1_parallel_coordinate_plot
+_post2_regional_pca
 
 ================================================================*/
 
@@ -319,9 +320,41 @@ process _post1_parallel_coordinate_plot {
   file mk_files from mkfiles_post1
 
 	output:
-	file "*_plot.*" into results_post1_parallel_coordinate_plot
+	file "*" into results_post1_parallel_coordinate_plot mode flatten
 
 	"""
+	bash runmk.sh
+	"""
+
+}
+
+///
+/* 	Process _post2_regional_pca */
+
+/* Gather results in a single channel */
+results_post1_parallel_coordinate_plot
+.toList()
+.set{ inputs_for_post2 }
+
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-regional-PCA/*")
+	.toList()
+	.set{ mkfiles_post2 }
+
+process _post2_regional_pca {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post2_regional_pca/",mode:"copy"
+
+	input:
+  file pca_files from inputs_for_post2
+  file mk_files from mkfiles_post2
+
+	output:
+	file "*"
+
+	"""
+	export TAG_FILE="${params.region_tags}"
 	bash runmk.sh
 	"""
 

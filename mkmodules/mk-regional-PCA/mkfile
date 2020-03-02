@@ -1,0 +1,6 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.regionalPCA.svg:Q: %.parallel_plot.PCA_df.tsv %.parallel_plot.significant_pc.tsv %.parallel_plot.tsv $TAG_FILE
+	echo "[DEBUG] generating plot for $target"
+	Rscript --vanilla plotter.R $prereq $target
