@@ -1,0 +1,6 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.admixture_plot.svg:Q: %.Q %.popinfo.txt
+	echo "[DEBUG] Exporting $prereq"
+	Rscript --vanilla admixture_plotter.R $prereq $target

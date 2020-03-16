@@ -29,13 +29,16 @@ Pipeline Processes In Brief:
 Pre-processing:
 _pre1_vcf2plink
 _pre2_make_pedind
+_pre3_make_pop_info
 
 Core-processing:
 _001_make_par_file_smartpca
+_002_run_admixture
 
 Pos-processing
 _post1_parallel_coordinate_plot
 _post2_regional_pca
+_post3_plot_admixture
 
 ================================================================*/
 
@@ -272,7 +275,32 @@ process _pre2_make_pedind {
 	file "*.pedind" into results_pre2_make_pedind
 
 	"""
-	export TSV="${params.tsv}"
+	export SAMPLE_INFO="${params.sample_info}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _pre3_make_pop_info */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-make-pop-info/*")
+	.toList()
+	.set{ mkfiles_pre3 }
+
+process _pre3_make_pop_info {
+
+	publishDir "${intermediates_dir}/_pre3_make_pop_info/",mode:"symlink"
+
+	input:
+	file fam from results_FAM
+	file mk_files from mkfiles_pre3
+	output:
+	file "*popinfo.txt" into results_pre3_make_popinfo
+
+	"""
+	export SAMPLE_INFO="${params.sample_info}"
+	export K_VALUE="${params.k_value}"
 	bash runmk.sh
 	"""
 
@@ -299,6 +327,33 @@ process _001_make_par_file_smartpca {
 
 	"""
 	export PCA_NUMBER="${params.pca_number}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _002_run_admixture */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-run-admixture/*")
+	.toList()
+	.set{ mkfiles_002 }
+
+process _002_run_admixture {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_002_run_admixture/",mode:"copy"
+
+	input:
+  file bed from results_pre1_vcf2plink
+  file mk_files from mkfiles_002
+
+	output:
+	file "*.Q" into results_002_run_admixture
+
+	"""
+	export K_VALUE="${params.k_value}"
+	export PLINK="${params.plink}"
+	export THREADS_PLINK="${params.threads_plink}"
 	bash runmk.sh
 	"""
 
@@ -355,6 +410,31 @@ process _post2_regional_pca {
 
 	"""
 	export TAG_FILE="${params.region_tags}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _post3_plot_admixture */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-plot-admixture/*")
+	.toList()
+	.set{ mkfiles_post3 }
+
+process _post3_plot_admixture {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post3_plot_admixture/",mode:"copy"
+
+	input:
+  file treemix from results_002_run_admixture
+	file popinfo from results_pre3_make_popinfo
+  file mk_files from mkfiles_post3
+
+	output:
+	file "*.svg" into results_post3_plot_admixture
+
+	"""
 	bash runmk.sh
 	"""
 
