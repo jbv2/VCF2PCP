@@ -1,6 +1,6 @@
 ## Define shell command line which will be used to run scripts.
 MKSHELL=/bin/bash
 
-%.autosomal.popinfo.txt:Q: %.fam $SAMPLE_INFO
-	echo "[DEBUG] Exporting $SAMPLE_INFO"
-	Rscript --vanilla make_popinfo.R $prereq $stem.autosomal.$K_VALUE.popinfo.txt
+%.autosomal.popinfo.txt:Q: %.fam $TAG_FILE
+	echo "[DEBUG] Exporting $TAG_FILE"
+	Rscript --vanilla make_popinfo.R $prereq $target
