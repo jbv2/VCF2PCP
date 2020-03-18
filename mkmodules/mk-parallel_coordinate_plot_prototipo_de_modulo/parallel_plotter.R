@@ -49,11 +49,11 @@ tw.df <- read.table(file = tw_file,
 
 # Extract number of last significant PC
 last_significant_pc <- tw.df %>%
-  filter(V5 < 0.05) %>%
+  filter(V5 < 0.01) %>%
   select(V1) %>% max()
 
 last_significant_pvalue <- tw.df %>%
-  filter(V5 < 0.05) %>%
+  filter(V5 < 0.01) %>%
   select(V5) %>% max()
 
 ## create message to inform last significant PC and p-value
@@ -78,7 +78,7 @@ scree.p <- ggplot(data = raw_evaldata.df, aes(x = component_number, y = V1, grou
 
 ## calculate % of variance for each PC
 significant_pc.df <- tw.df %>%
-  filter(V5 < 0.05) %>%
+  filter(V5 < 0.01) %>%
   select(V1, V2)
 
 significant_pc.df$V1 <- paste0("PC", significant_pc.df$V1)
@@ -165,10 +165,18 @@ grid_below <- plot_grid(scree.p, variance.p,
                         nrow = 1, rel_widths = c(0.3,0.7))
 grid.p <- plot_grid(PCP.p, grid_below, ncol = 1)
 
-## save plot
+## save plot as svg
 ggsave(filename = svg_file,
        plot = grid.p,
        device = "svg",
+       width = 10, height = 7 , units = "in",
+       dpi = 300)
+
+## save plot as png
+png_file <- gsub(pattern = ".svg", replacement = ".png", svg_file)
+ggsave(filename = png_file,
+       plot = grid.p,
+       device = "png",
        width = 10, height = 7 , units = "in",
        dpi = 300)
 

@@ -323,7 +323,7 @@ process _post1_parallel_coordinate_plot {
 	file "*" into results_post1_parallel_coordinate_plot mode flatten
 
 	"""
-	bash runmk.sh
+	bash runmk.sh && rm Rplots.pdf
 	"""
 
 }
