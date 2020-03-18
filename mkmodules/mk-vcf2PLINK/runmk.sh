@@ -4,6 +4,6 @@
 #find: -L option to include symlinks
 find -L . \
   -type f \
-  -name "*.vcf.gz" \
-| sed 's#.vcf.gz#.LD.maf_filtered.bed#' \
+  -name "*.noLD.vcf" \
+| sed 's#.noLD.vcf#.LD.maf_filtered.bed#' \
 | xargs mk

@@ -15,5 +15,5 @@ echo "[>>.] results will be created in test/results"
 ## Move results from test/data to test/results
 ## results files are evec and evel files, bestsnps, and statics of PCs in *.tracy_widom_statistics and stdout.
 bash runmk.sh \
-&& mv test/data/*.ev* test/data/*.stdout test/data/*.tracy_widom_statistics test/data/*.bestsnps test/results/ \
+&& mv test/data/*.ev* test/data/*.stdout test/data/*.tracy_widom_statistics test/data/*.bestsnps test/data/*.par test/results/ \
 && echo "[>>>] Module Test Successful"

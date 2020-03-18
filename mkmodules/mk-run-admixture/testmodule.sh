@@ -4,7 +4,7 @@
 ###
 ## environment variable setting
 export SEED_VALUE="43"
-
+export ADMIXTURE_THREADS="8"
 ###
 
 echo "[>..] test running this module with data in test/data"
@@ -16,6 +16,7 @@ echo "[>>.] results will be created in test/results"
 ## Move results from test/data to test/results
 ## results files are *.bed, *.bim & *.fam without LD and maf filtered.
 ## Also, a vcf simplified and when there is no rsID, an ID has been assigned.
+# (DEBUG) note: in iaguilar station it does not move the 7 and 8 .Q and .P files to test/results
 bash runmk.sh \
-&& mv *.Q *.P test/data/*.log test/results/ \
+&& mv test/data/*.log *.Q *.P test/results/ \
 && echo "[>>>] Module Test Successful"

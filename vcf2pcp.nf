@@ -30,14 +30,14 @@ Pre-processing:
 _pre1_split_chromosomes
 _pre2_simplify_removeLD
 _pre3_rejoinvcf
-// _pre1_vcf2plink
-// _pre2_make_pedind
-// _pre3_make_pop_info
+_pre4_vcf2plink
+_pre5_make_pedind
+_pre6_make_pop_info
 
 Core-processing:
-// _001_make_par_file_smartpca
-// _002_keep_autosomes
-// _003_run_admixture
+_001_make_par_file_smartpca
+_002_keep_autosomes
+_003_run_admixture
 
 Pos-processing
 // _post1_parallel_coordinate_plot
@@ -179,7 +179,6 @@ def get_baseName(f) {
   	f.substring(f.lastIndexOf('/') + 1);
 }
 
-
 /*//////////////////////////////
   LOG RUN INFORMATION
 */
@@ -305,6 +304,176 @@ process _pre3_rejoinvcf {
 	file "*.vcf" into results_pre3_rejoinvcf
 
 	"""
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _pre4_vcf2plink */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-vcf2PLINK/*")
+	.toList()
+	.set{ mkfiles_pre4 }
+
+process _pre4_vcf2plink {
+
+	publishDir "${intermediates_dir}/_pre4_vcf2plink/",mode:"symlink"
+
+	input:
+	file vcf from results_pre3_rejoinvcf
+	file mk_files from mkfiles_pre4
+
+	output:
+	file "*.LD.maf_filtered*" into results_pre4_vcf2plink
+	file "*.LD.maf_filtered.fam" into results_FAM
+
+	"""
+  export PLINK2="${params.plink2}"
+	export MAF="${params.maf}"
+	export THREADS_PLINK="${params.threads_plink}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _pre5_make_pedind */
+
+/* get the sample info file into a channel */
+Channel
+	.fromPath("${params.sample_info}*")
+	.toList()
+	.set{ sample_file }
+
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-make-pedind/*")
+	.toList()
+	.set{ mkfiles_pre5 }
+
+process _pre5_make_pedind {
+
+	publishDir "${intermediates_dir}/_pre5_make_pedind/",mode:"symlink"
+
+	input:
+	file fam from results_FAM
+	file reference from sample_file
+	file mk_files from mkfiles_pre5
+
+	output:
+	file "*.pedind" into results_pre5_make_pedind
+
+	"""
+	export SAMPLE_INFO="${get_baseName(params.sample_info)}"
+	bash runmk.sh
+	"""
+}
+
+/* 	Process _pre6_make_pop_info */
+/* get the sample info file into a channel */
+Channel
+	.fromPath("${params.region_tags}*")
+	.toList()
+	.set{ tag_file }
+
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-make-pop-info/*")
+	.toList()
+	.set{ mkfiles_pre6 }
+
+process _pre6_make_pop_info {
+
+	publishDir "${intermediates_dir}/_pre6_make_pop_info/",mode:"symlink"
+
+	input:
+	file fam from results_FAM
+	file reference from tag_file
+	file mk_files from mkfiles_pre6
+	output:
+	file "*popinfo.txt" into results_pre6_make_pop_info
+
+	"""
+	export TAG_FILE="${get_baseName(params.region_tags)}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _001_make_par_file_smartpca */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-make-par-file_smartpca/*")
+	.toList()
+	.set{ mkfiles_001 }
+
+process _001_make_par_file_smartpca {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_001_make_par_file_smartpca/",mode:"copy"
+
+	input:
+  file bed from results_pre4_vcf2plink
+  file pedind from results_pre5_make_pedind
+  file mk_files from mkfiles_001
+
+	output:
+	file "*" into results_001_make_par_file_smartpca
+
+	"""
+	export PCA_NUMBER="${params.pca_number}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _002_keep_autosomes */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-keep-autosomes/*")
+	.toList()
+	.set{ mkfiles_002 }
+
+process _002_keep_autosomes {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_002_keep_autosomes/",mode:"symlink"
+
+	input:
+  file bed from results_pre4_vcf2plink
+  file mk_files from mkfiles_002
+
+	output:
+	file "*.autosomal.*" into results_002_keep_autosomes
+
+	"""
+	export PLINK2="${params.plink2}"
+	export THREADS_PLINK="${params.threads_plink}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _003_run_admixture */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-run-admixture/*")
+	.toList()
+	.set{ mkfiles_003 }
+
+process _003_run_admixture {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_003_run_admixture/",mode:"copy"
+
+	input:
+  file bed from results_002_keep_autosomes
+  file mk_files from mkfiles_003
+
+	output:
+	file "*" into results_003_run_admixture
+	file "*.log" into results_log
+
+	"""
+	export SEED_VALUE="${params.admixture_seed_value}"
+	export ADMIXTURE_THREADS="${params.admixture_threads}"
 	bash runmk.sh
 	"""
 

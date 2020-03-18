@@ -2,16 +2,18 @@
 MKSHELL=/bin/bash
 
 %.LD.maf_filtered.bed:Q: %.LD.converted.bed
-	echo "[DEBUG] Filtering maf 5% with plink"
-	$PLINK --bfile $stem.LD.converted \
+	echo "[DEBUG] Filtering maf with plink  $prereq"
+	$PLINK2 --bfile $stem.LD.converted \
 	--maf $MAF \
 	--make-bed \
 	--threads $THREADS_PLINK \
-	--out $stem.LD.maf_filtered
+	--out $stem.LD.maf_filtered \
+	&& rm $stem.LD.converted.*
 
-%.LD.converted.bed:Q: %.LD.vcf
-	echo "[DEBUG] Converting vcf to plink file"
-	$PLINK --vcf $prereq \
+## TO-DO (code revision) (iaguilar) - parameter --const-fid should be parametrized
+%.LD.converted.bed:Q: %.noLD.vcf
+	echo "[DEBUG] Converting vcf to plink file $prereq"
+	$PLINK2 --vcf $prereq \
 	--keep-allele-order \
 	--const-fid "NAT_AMR" \
 	--vcf-filter \
@@ -20,32 +22,3 @@ MKSHELL=/bin/bash
 	--make-bed \
 	--threads $THREADS_PLINK \
 	--out $stem.LD.converted
-
-%.LD.vcf:Q: %.simplified_2.vcf
-	echo "[DEBUG] Removing variants in LD"
-	bcftools +prune \
-		$prereq \
-		--max-LD $LD \
-    --window $WINDOW \
-		--nsites-per-win $N_sites \
-		--annotate-info STR \
-		--set-filter MAX_R2 \
-                > $target
-
-%.simplified_2.vcf:Q: %.simplified.vcf
-	echo "[DEBUG] Filling missing rsID"
-	awk ' BEGIN {FS=OFS="\t"}
-	{
-		if($3==".")
-			$3=$1"_"$2"_"$4"_"$5
-		print $0
-	}' $prereq > $target
-
-
-%.simplified.vcf:Q: %.vcf.gz
-	echo "[DEBUG] Simplifying vcf to keep only INFO/AF and GT"
-	bcftools annotate \
-		--remove INFO \
-		$prereq \
-	| bcftools +fill-tags \
-	> $target

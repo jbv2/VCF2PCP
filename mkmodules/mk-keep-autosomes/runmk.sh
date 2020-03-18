@@ -4,8 +4,7 @@
 #find: -L option to include symlinks
 find -L . \
   -type f \
-  -name "*.LD.maf_filtered.bed" \
-  ! -name "*.autosomal..kvalue_.bed" \
-  ! -name "*.converted.bed" \
-| sed 's#.bed#.autosomal.kvalue_.bed#' \
+  -name "*.bed" \
+  ! -name "*.autosomal.bed" \
+| sed 's#.bed#.autosomal.bed#' \
 | xargs mk

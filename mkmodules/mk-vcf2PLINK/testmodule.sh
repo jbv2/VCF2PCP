@@ -3,11 +3,8 @@
 
 ###
 ## environment variable setting
-export PLINK="plink2"
-export LD="0.8"
-export WINDOW="2000"
+export PLINK2="plink2"
 export MAF="0.05"
-export N_sites="2000"
 export THREADS_PLINK="4"
 ###
 
@@ -19,7 +16,6 @@ echo "[>>.] results will be created in test/results"*.vcf
 ## Execute runmk.sh, it will find the basic example in test/data
 ## Move results from test/data to test/results
 ## results files are *.bed, *.bim & *.fam without LD and maf filtered.
-## Also, a vcf simplified and when there is no rsID, an ID has been assigned.
 bash runmk.sh \
-&& mv test/data/*.maf_filtered.* test/data/*.vcf test/data/*.converted.* test/results/ \
+&& mv test/data/*.maf_filtered.* test/results/ \
 && echo "[>>>] Module Test Successful"
