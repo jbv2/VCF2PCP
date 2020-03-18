@@ -6,4 +6,4 @@ find -L . \
   -type f \
   -name "*.Q" \
 | sed 's#.Q#.admixture_plot.svg#' \
-| xargs mk
+| xargs mk 

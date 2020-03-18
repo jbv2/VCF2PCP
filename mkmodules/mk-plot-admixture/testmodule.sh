@@ -3,7 +3,7 @@
 
 ###
 ## environment variable setting
-# NONE
+# export POPINFO="test/data/sample22.LD.maf_filtered.autosomal.popinfo.txt"
 ###
 
 echo "[>..] test running this module with data in test/data"
