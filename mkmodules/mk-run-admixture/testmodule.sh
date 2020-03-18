@@ -3,9 +3,8 @@
 
 ###
 ## environment variable setting
-export PLINK="plink2"
-export K_VALUE="3"
-export THREADS_PLINK="4"
+export SEED_VALUE="43"
+
 ###
 
 echo "[>..] test running this module with data in test/data"
@@ -18,5 +17,5 @@ echo "[>>.] results will be created in test/results"
 ## results files are *.bed, *.bim & *.fam without LD and maf filtered.
 ## Also, a vcf simplified and when there is no rsID, an ID has been assigned.
 bash runmk.sh \
-&& mv sample22.LD.maf_filtered.autosomal.3.Q sample22.LD.maf_filtered.autosomal.3.P test/data/*.autosomal.* test/results/ \
+&& mv *.Q *.P test/data/*.log test/results/ \
 && echo "[>>>] Module Test Successful"

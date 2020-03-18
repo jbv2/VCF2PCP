@@ -1,14 +1,13 @@
 ## Define shell command line which will be used to run scripts.
 MKSHELL=/bin/bash
 
-%.autosomal.log:Q: %.autosomal.bed
+%.admixture.kvalue_.log:Q: %.autosomal.kvalue_.bed
 	echo "[DEBUG] Running admixture for $prereq"
-	admixture --cv $prereq $K_VALUE > $stem.autosomal.K.$K_VALUE.log
-
-%.autosomal.bed:Q: %.bed
-	echo "[DEBUG] Keeping autosomal chromosomes"
-	$PLINK --bfile $stem \
-	--chr 1-22 \
-	--make-bed \
-	--threads $THREADS_PLINK \
-	--out $stem.autosomal
+	admixture --cv --seed $SEED_VALUE $prereq 2 > $target &
+	admixture --cv --seed $SEED_VALUE $prereq 3 >> $target &
+	admixture --cv --seed $SEED_VALUE $prereq 4 >> $target &
+	admixture --cv --seed $SEED_VALUE $prereq 5 >> $target &
+	admixture --cv --seed $SEED_VALUE $prereq 6 >> $target &
+	admixture --cv --seed $SEED_VALUE $prereq 7 >> $target &
+	admixture --cv --seed $SEED_VALUE $prereq 8 >> $target &
+	admixture --cv --seed $SEED_VALUE $prereq 9 >> $target
