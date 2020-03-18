@@ -280,3 +280,32 @@ process _pre2_simplify_removeLD {
 	"""
 
 }
+
+/* Gather every previous result from pre4 before rejoining */
+results_pre2_simplify_removeLD
+.toList()
+.set{ all_chunks }
+
+/* 	Process _pre3_rejoinvcf */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-rejoin-vcf/*")
+	.toList()
+	.set{ mkfiles_pre3 }
+
+process _pre3_rejoinvcf {
+
+	publishDir "${intermediates_dir}/_pre3_rejoinvcf/",mode:"symlink"
+
+	input:
+	file chunks from all_chunks
+	file mk_files from mkfiles_pre3
+
+	output:
+	file "*.vcf" into results_pre3_rejoinvcf
+
+	"""
+	bash runmk.sh
+	"""
+
+}

@@ -1,11 +1,6 @@
 ## Define shell command line which will be used to run scripts.
 MKSHELL=/bin/bash
 
-## Note: +prune replaces custom IDs with .
-# firstrun annotate --Remove
-# then +filltags
-# then  +prune
-# then awk to fill ids
 %.noLD.vcf:Q: %.vcf
 	echo "[DEBUG] Removing variants in LD from $prereq"
 	echo "[DEBUG] First Simplifying vcf to keep only INFO/AF and GT from $prereq"
@@ -14,7 +9,6 @@ MKSHELL=/bin/bash
 		$prereq \
 	| bcftools +fill-tags \
 	| bcftools +prune \
-		$prereq \
 		--max-LD $LD \
     --window $WINDOW \
 		--nsites-per-win $N_SITES \
