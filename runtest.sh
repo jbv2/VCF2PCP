@@ -1,7 +1,7 @@
 echo -e "======\n Testing NF execution \n======" \
 && rm -rf test/results/ \
 && nextflow run vcf2pcp.nf \
-	--vcffile test/data/sample22.vcf.gz \
+	--vcffile test/data/sampleWGS.vcf.gz \
 	--output_dir test/results \
 	-resume \
 	-with-report test/results/`date +%Y%m%d_%H%M%S`_report.html \
