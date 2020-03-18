@@ -1,0 +1,10 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.autosomal.kvalue_.bed:Q: %.bed
+	echo "[DEBUG] Keeping autosomal chromosomes"
+	$PLINK --bfile $stem \
+	--chr 1-22 \
+	--make-bed \
+	--threads $THREADS_PLINK \
+	--out $stem.autosomal.kvalue_

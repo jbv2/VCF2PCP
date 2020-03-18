@@ -1,6 +1,6 @@
 ## Define shell command line which will be used to run scripts.
 MKSHELL=/bin/bash
 
-%.pedind:Q: %.fam $TSV
-	echo "[DEBUG] Exporting $TSV"
+%.pedind:Q: %.fam $SAMPLE_INFO
+	echo "[DEBUG] Exporting $SAMPLE_INFO"
 	Rscript --vanilla tagger.R $prereq $target

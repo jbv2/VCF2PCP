@@ -29,13 +29,18 @@ Pipeline Processes In Brief:
 Pre-processing:
 _pre1_vcf2plink
 _pre2_make_pedind
+_pre3_make_pop_info
 
 Core-processing:
 _001_make_par_file_smartpca
+_002_keep_autosomes
+_003_run_admixture
 
 Pos-processing
 _post1_parallel_coordinate_plot
 _post2_regional_pca
+_post3_plot_admixture
+_post4_plot_cvs
 
 ================================================================*/
 
@@ -272,7 +277,31 @@ process _pre2_make_pedind {
 	file "*.pedind" into results_pre2_make_pedind
 
 	"""
-	export TSV="${params.tsv}"
+	export SAMPLE_INFO="${params.sample_info}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _pre3_make_pop_info */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-make-pop-info/*")
+	.toList()
+	.set{ mkfiles_pre3 }
+
+process _pre3_make_pop_info {
+
+	publishDir "${intermediates_dir}/_pre3_make_pop_info/",mode:"symlink"
+
+	input:
+	file fam from results_FAM
+	file mk_files from mkfiles_pre3
+	output:
+	file "*popinfo.txt" into results_pre3_make_popinfo
+
+	"""
+	export TAG_FILE="${params.region_tags}"
 	bash runmk.sh
 	"""
 
@@ -299,6 +328,58 @@ process _001_make_par_file_smartpca {
 
 	"""
 	export PCA_NUMBER="${params.pca_number}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _002_keep_autosomes */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-keep-autosomes/*")
+	.toList()
+	.set{ mkfiles_002 }
+
+process _002_keep_autosomes {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_002_keep_autosomes/",mode:"symlink"
+
+	input:
+  file bed from results_pre1_vcf2plink
+  file mk_files from mkfiles_002
+
+	output:
+	file "*.kvalue_*" into results_002_keep_autosomes
+
+	"""
+	export PLINK="${params.plink}"
+	export THREADS_PLINK="${params.threads_plink}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _003_run_admixture */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-run-admixture/*")
+	.toList()
+	.set{ mkfiles_003 }
+
+process _003_run_admixture {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_003_run_admixture/",mode:"copy"
+
+	input:
+  file bed from results_002_keep_autosomes
+  file mk_files from mkfiles_003
+
+	output:
+	file "*.kvalue_*" into results_003_run_admixture
+	file "*.log" into results_log
+
+	"""
+	export SEED_VALUE="${params.seed_value}"
 	bash runmk.sh
 	"""
 
@@ -355,6 +436,55 @@ process _post2_regional_pca {
 
 	"""
 	export TAG_FILE="${params.region_tags}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _post3_plot_admixture */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-plot-admixture/*")
+	.toList()
+	.set{ mkfiles_post3 }
+
+process _post3_plot_admixture {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post3_plot_admixture/",mode:"copy"
+
+	input:
+  file admixture from results_003_run_admixture
+	file popinfo from results_pre3_make_popinfo
+  file mk_files from mkfiles_post3
+
+	output:
+	file "*.svg" into results_post3_plot_admixture
+
+	"""
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _post4_plot_cvs */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-plot-cvs/*")
+	.toList()
+	.set{ mkfiles_post4 }
+
+process _post4_plot_cvs {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post4_plot_cvs/",mode:"copy"
+
+	input:
+  file log from results_log
+  file mk_files from mkfiles_post4
+
+	output:
+	file "*" into results_post4_plot_cvs
+
+	"""
 	bash runmk.sh
 	"""
 

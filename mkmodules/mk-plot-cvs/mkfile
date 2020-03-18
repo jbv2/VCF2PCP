@@ -1,0 +1,15 @@
+## Define shell command line which will be used to run scripts.
+MKSHELL=/bin/bash
+
+%.svg:Q: %.tsv
+	echo "[DEBUG] Plotting cvs value"
+	Rscript --vanilla plotter.R $prereq $target
+
+%.tsv:Q: %.log
+	echo "[DEBUG] Joining cvs values"
+	echo "K CrossValidationError" | tr ' ' '\t' > $target
+	grep -h CV $prereq \
+	| cut -f 3,4 -d " " \
+	| tr ' ' '\t' \
+	| sed -e 's#(K=##' \
+				-e 's#):##' >> $target

@@ -1,0 +1,1 @@
+../../../mk-run-admixture/test/results/sample22.LD.maf_filtered.autosomal.kvalue_.4.Q
