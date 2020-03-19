@@ -5,7 +5,8 @@ MKSHELL=/bin/bash
 	## Rememeber to account argument 3 as the tw-statistics
 	echo "[DEBUG] plotting $target"
 	## pass to R script
-	Rscript --vanilla parallel_plotter.R $prereq $target
+	Rscript --vanilla parallel_plotter.R $prereq $target \
+	&& rm Rplots.pdf
 
 ## reformat the evec file to repalce spaces
 %.evec.tmp:Q: %.evec
