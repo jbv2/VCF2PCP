@@ -40,8 +40,8 @@ _002_keep_autosomes
 _003_run_admixture
 
 Pos-processing
-// _post1_parallel_coordinate_plot
-// _post2_regional_pca
+_post1_parallel_coordinate_plot
+_post2_regional_pca
 // _post3_plot_admixture
 // _post4_plot_cvs
 
@@ -460,7 +460,7 @@ Channel
 	.set{ mkfiles_003 }
 
 process _003_run_admixture {
-
+	cache 'deep' //added since on testing we observed persistant process rerun despite of previous success
 	publishDir "${params.output_dir}/${pipeline_name}-results/_003_run_admixture/",mode:"copy"
 
 	input:
@@ -474,6 +474,63 @@ process _003_run_admixture {
 	"""
 	export SEED_VALUE="${params.admixture_seed_value}"
 	export ADMIXTURE_THREADS="${params.admixture_threads}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _post1_parallel_coordinate_plot */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-parallel_coordinate_plot/*")
+	.toList()
+	.set{ mkfiles_post1 }
+
+process _post1_parallel_coordinate_plot {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post1_parallel_coordinate_plot/",mode:"copy"
+
+	input:
+  file evec from results_001_make_par_file_smartpca
+  file mk_files from mkfiles_post1
+
+	output:
+	file "*" into results_post1_parallel_coordinate_plot mode flatten //required for propper gathering donwstream
+
+	"""
+	bash runmk.sh
+	"""
+
+}
+
+///
+/* 	Process _post2_regional_pca */
+
+/* Gather results in a single channel */
+results_post1_parallel_coordinate_plot
+.toList()
+.set{ inputs_for_post2 }
+
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-regional-PCA/*")
+	.toList()
+	.set{ mkfiles_post2 }
+
+process _post2_regional_pca {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post2_regional_pca/",mode:"copy"
+
+	input:
+  file pca_files from inputs_for_post2
+	file reference from tag_file
+  file mk_files from mkfiles_post2
+
+	output:
+	file "*"
+
+	"""
+	export TAG_FILE="${get_baseName(params.region_tags)}"
 	bash runmk.sh
 	"""
 
