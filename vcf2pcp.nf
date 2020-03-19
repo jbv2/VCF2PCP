@@ -43,7 +43,8 @@ Pos-processing
 _post1_parallel_coordinate_plot
 _post2_regional_pca
 _post3_plot_admixture
-// _post4_plot_cvs
+_post4_plot_cvs
+_post5_gather_admixture_plots
 
 ================================================================*/
 
@@ -559,7 +560,6 @@ process _post3_plot_admixture {
 	"""
 	bash runmk.sh
 	"""
-
 }
 
 /* 	Process _post4_plot_cvs */
@@ -579,6 +579,30 @@ process _post4_plot_cvs {
 
 	output:
 	file "*" into results_post4_plot_cvs
+
+	"""
+	bash runmk.sh
+	"""
+
+}
+
+/* _post5_gather_admixture_plots */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-gather-admixture-plots/*")
+	.toList()
+	.set{ mkfiles_post5 }
+
+process _post5_gather_admixture_plots {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post5_gather_admixture_plots/",mode:"copy"
+
+	input:
+  file allrds from results_post3_plot_admixture
+  file mk_files from mkfiles_post5
+
+	output:
+	file "*.svg"
 
 	"""
 	bash runmk.sh
