@@ -388,7 +388,7 @@ process _003_run_admixture {
 /* 	Process _post1_parallel_coordinate_plot */
 /* Read mkfile module files */
 Channel
-	.fromPath("${workflow.projectDir}/mkmodules/mk-parallel_coordinate_plot_prototipo_de_modulo/*")
+	.fromPath("${workflow.projectDir}/mkmodules/mk-parallel_coordinate_plot/*")
 	.toList()
 	.set{ mkfiles_post1 }
 
