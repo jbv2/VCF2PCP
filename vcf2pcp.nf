@@ -436,7 +436,7 @@ Channel
 
 process _002_keep_autosomes {
 
-	publishDir "${params.output_dir}/${pipeline_name}-results/_002_keep_autosomes/",mode:"symlink"
+	publishDir "${params.intermediates_dir}/${pipeline_name}-results/_002_keep_autosomes/",mode:"symlink"
 
 	input:
   file bed from results_pre4_vcf2plink
