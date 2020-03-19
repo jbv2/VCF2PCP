@@ -3,7 +3,7 @@
 
 ###
 ## environment variable setting
-# export POPINFO="test/data/sample22.LD.maf_filtered.autosomal.popinfo.txt"
+# NONE
 ###
 
 echo "[>..] test running this module with data in test/data"
@@ -15,5 +15,5 @@ echo "[>>.] results will be created in test/results"
 ## Move results from test/data to test/results
 ## results files are plots in svg format
 bash runmk.sh \
-&& mv test/data/*.svg test/results/ \
+&& mv test/data/*.svg test/data/*.rds test/results/ \
 && echo "[>>>] Module Test Successful"

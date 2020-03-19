@@ -27,7 +27,7 @@ tag_columns_need.df <- tag_data.df %>% select(2, 4)
 ## merge files
 merged.df <- left_join(x = fam_columns_need.df,
                        y = tag_columns_need.df,
-                       by = c("V2" = "V1")) 
+                       by = c("V2" = "V1"))
 colnames(merged.df) <- c("FAMID","ID","POP")
 
 ## save table
@@ -35,4 +35,4 @@ write.table(x = merged.df,
             file = args[3],
             append = F, quote = F,
             sep = "\t",
-            row.names = F, col.names = T)
+            row.names = F, col.names = F)

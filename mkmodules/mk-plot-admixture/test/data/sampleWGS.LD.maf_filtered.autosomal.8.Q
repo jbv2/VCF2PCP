@@ -1,0 +1,1 @@
+../../../mk-run-admixture/test/results/sampleWGS.LD.maf_filtered.autosomal.8.Q

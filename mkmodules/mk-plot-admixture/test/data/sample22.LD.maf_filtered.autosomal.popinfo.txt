@@ -1,1 +1,0 @@
-../../../mk-make-pop-info/test/results/sample22.LD.maf_filtered.autosomal.popinfo.txt

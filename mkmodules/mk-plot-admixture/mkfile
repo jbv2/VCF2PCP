@@ -1,7 +1,11 @@
 ## Define shell command line which will be used to run scripts.
 MKSHELL=/bin/bash
 
-%.admixture_plot.svg:Q: %.Q
-	export POPINFO="$(find -L . -type f -name "*.txt")"
-	echo "[DEBUG] Plotting admixture results for $prereq $POPINFO"
-	Rscript --vanilla admixture_plotter.R $prereq $POPINFO $target
+(.*)\\.([0-9*])\\.admixture_plot\\.svg:QR: \\1\\.\\2\\.proportions.tmp
+	echo "[DEBUG] Plotting admixture results for $prereq"
+	Rscript --vanilla admixture_plotter.R $prereq $stem2 $target \
+	&& rm $prereq
+
+(.*)\\.([0-9*])\\.proportions\\.tmp:QR: \\1\\.popinfo.txt \\1\\.\\2\\.Q
+	echo "[DEBUG] pasting table for $prereq"
+	paste $prereq | tr " " "\t" > $target
