@@ -7,8 +7,8 @@ args = commandArgs(trailingOnly=TRUE)
 
 ## Uncomment For debugging only
 ## Comment for production mode only
-# args[1] <- "test/data/sample22.LD.maf_filtered.admixture.kvalue_.tsv" ## %.tsv values file
-# args[2] <- "test/data/sample22.LD.maf_filtered.autosomal.kvalue_.svg" ## %.svg file
+# args[1] <- "test/data/sampleWGS.LD.maf_filtered.autosomal.admixture.tsv" ## %.tsv values file
+# args[2] <- "test/data/sampleWGS.LD.maf_filtered.autosomal.kvalue_.svg" ## %.svg file
 
 ## Passing args to named objects
  tsv_file <- args[1]
@@ -20,6 +20,17 @@ args = commandArgs(trailingOnly=TRUE)
    sep = "\t",
    stringsAsFactors = F)
 
+## get the minimum CV value
+## order dataframe ascending by CrossValidationError
+lowest_row <- cvs_values.df %>%
+   select(K, CrossValidationError) %>%
+   arrange(CrossValidationError)
+
+# Extract number of lowest cv
+lowest_cv <- lowest_row[1,"CrossValidationError"]
+lowest_k <- lowest_row[1,"K"]
+ 
+ 
 ## Make plot
  cvs.p <- ggplot(data = cvs_values.df,
                       aes(x = K,
@@ -29,7 +40,7 @@ args = commandArgs(trailingOnly=TRUE)
    geom_line(color = "red4", alpha = 0.5)+
    geom_point(color = "red4")+
    scale_y_continuous(limits = c(0,1)) +
-   ggtitle(label = "CVS values of K2:9")+
+   ggtitle(label = paste("K",lowest_k,"had the lowest cv value =", lowest_cv))+
    theme(plot.title = element_text(hjust = 0.5, size = 15)) +
    theme_bw()
 

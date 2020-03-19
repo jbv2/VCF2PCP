@@ -1,0 +1,6 @@
+MKSHELL=/bin/bash
+
+%.admixture_strip.svg:Q:
+	all_files=$(ls $stem.*rds | sort -V)
+	echo "[DEBUG] plotting every plot from $all_files"
+	Rscript --vanilla plotter.R $all_files $target

@@ -42,7 +42,7 @@ _003_run_admixture
 Pos-processing
 _post1_parallel_coordinate_plot
 _post2_regional_pca
-// _post3_plot_admixture
+_post3_plot_admixture
 // _post4_plot_cvs
 
 ================================================================*/
@@ -531,6 +531,56 @@ process _post2_regional_pca {
 
 	"""
 	export TAG_FILE="${get_baseName(params.region_tags)}"
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _post3_plot_admixture */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-plot-admixture/*")
+	.toList()
+	.set{ mkfiles_post3 }
+
+process _post3_plot_admixture {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post3_plot_admixture/",mode:"copy"
+
+	input:
+  file admixture from results_003_run_admixture
+	file popinfo from results_pre6_make_pop_info
+  file mk_files from mkfiles_post3
+
+	output:
+	file "*.svg"
+	file "*.rds" into results_post3_plot_admixture
+
+	"""
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _post4_plot_cvs */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-plot-cvs/*")
+	.toList()
+	.set{ mkfiles_post4 }
+
+process _post4_plot_cvs {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_post4_plot_cvs/",mode:"copy"
+
+	input:
+  file log from results_log
+  file mk_files from mkfiles_post4
+
+	output:
+	file "*" into results_post4_plot_cvs
+
+	"""
 	bash runmk.sh
 	"""
 
