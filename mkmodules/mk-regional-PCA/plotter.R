@@ -112,7 +112,7 @@ pca_merged_data.df <- merge(x = pca_data.df, y = tag_data.df[,c(1,3)],
 # define main function
 my_pca_function <- function( pca_data, pc_x, pc_y, x_name, y_name) {
   ##pc_x and pc_y must be a string with the colname to plot
-pca_data %>% 
+pca_data %>%
   ggplot(aes(x=pc_x, y=pc_y, color = region)) +
   geom_point() +
   scale_x_continuous(name = x_name, limits = c(min_evec,max_evec)) +
@@ -128,18 +128,18 @@ start_pc_coln <- 3
 end_pc_coln <- ncol(pca_merged_data.df) -2
 
 for (i in start_pc_coln:end_pc_coln) {
-  
+
   PC_x_name <- "PC1"
   PC_y_name <- colnames(pca_merged_data.df[i])
   message(paste("[debug-R] plotting PC1 vs", PC_y_name))
-  
+
   ## generate plot
   my_plot.p <- my_pca_function(pca_data = pca_merged_data.df,
                   pc_x = pca_merged_data.df[ ,PC_x_name],
                   pc_y = pca_merged_data.df[ ,PC_y_name],
                   x_name = PC_x_name,
                   y_name = PC_y_name)
-  
+
   ## generate dynamic out file name
   #generate extension
   new_ext <- paste0(".",PC_x_name,"vs",PC_y_name,".svg")
@@ -147,7 +147,7 @@ for (i in start_pc_coln:end_pc_coln) {
   out_file <- gsub(pattern = ".svg",
                  replacement = new_ext,
                   svg_file)
-  
+
   ## save plot
   ggsave(filename = out_file,
          plot = my_plot.p,

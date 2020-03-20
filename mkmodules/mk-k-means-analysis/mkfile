@@ -1,0 +1,26 @@
+MKSHELL=/bin/bash
+
+## make the plot
+%.kmeans.svg:Q: %.evec.tmp %.tracy_widom_statistics %.number_of_snps
+	## Rememeber to account argument 3 as the tw-statistics
+	echo "[DEBUG] plotting $target"
+	## pass to R script
+	Rscript --vanilla kmean.R $prereq $target \
+	&& rm Rplots.pdf
+
+## reformat the evec file to repalce spaces
+%.evec.tmp:Q: %.evec
+	echo "[DEBUG] formatting evec file"
+	cat $prereq \
+	| tr -s " " \
+	| tr -d "#" \
+	| sed "s# ##" \
+	| sed "s# #\t#g" > $target
+
+%.number_of_snps:Q: %.smartpca.stdout
+	echo "[DEBUG] getting number of snps for PCA, and number of statistically significant PCs"
+	SNPS_USED=$(grep "number of snps used:" $prereq | cut -d" " -f10)
+	SAMPLES_USED=$(grep "number of snps used:" $prereq | cut -d" " -f5)
+	echo -e "category\tnumber" > $target
+	echo -e "snps used\t$SNPS_USED" >> $target
+	echo -e "samples used\t$SAMPLES_USED" >> $target

@@ -1,8 +1,0 @@
-genotypename: ./76g_1000GP-population_set4_M2_AF05_AN855_76g4PELs.LD.maf_filtered.bed
-snpname: ./76g_1000GP-population_set4_M2_AF05_AN855_76g4PELs.LD.maf_filtered.bim
-indivname: ./76g_1000GP-population_set4_M2_AF05_AN855_76g4PELs.LD.maf_filtered.pedind
-evecoutname: ./76g_1000GP-population_set4_M2_AF05_AN855_76g4PELs.LD.maf_filtered.evec
-evaloutname: ./76g_1000GP-population_set4_M2_AF05_AN855_76g4PELs.LD.maf_filtered.eval
-altnormstyle: NO
-numoutlieriter: 0
-numoutevec: 20
