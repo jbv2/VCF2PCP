@@ -45,6 +45,7 @@ _post2_regional_pca
 _post3_plot_admixture
 _post4_plot_cvs
 _post5_gather_admixture_plots
+_postX_kmeans <- should probably be moved before the regional pca module, to see every pc angle with the cluster data as the tag file...
 
 ================================================================*/
 
@@ -603,6 +604,30 @@ process _post5_gather_admixture_plots {
 
 	output:
 	file "*.svg"
+
+	"""
+	bash runmk.sh
+	"""
+
+}
+
+/* 	Process _postX_kmeans */
+/* Read mkfile module files */
+Channel
+	.fromPath("${workflow.projectDir}/mkmodules/mk-k-means-analysis/*")
+	.toList()
+	.set{ mkfiles_postX }
+
+process _postX_kmeans {
+
+	publishDir "${params.output_dir}/${pipeline_name}-results/_postX_kmeans/",mode:"copy"
+
+	input:
+  file evec from results_001_make_par_file_smartpca
+  file mk_files from mkfiles_postX
+
+	output:
+	file "*" into results_postX_kmeans
 
 	"""
 	bash runmk.sh
