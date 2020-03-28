@@ -62,7 +62,6 @@ GROUP1 sample3        0       0       0       -9
 PLINK2="plink2"
 MAF="0.05"
 THREADS_PLINK="4"
-FAM_ID="GROUP1"
 
 ## Testing the module:
 
