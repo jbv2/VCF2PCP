@@ -64,8 +64,7 @@ To test VCF2PCP execution using test data, run:
     vcf2pcp: Basic pipeline TEST SUCCESSFUL
     ======
     ```
-    Real data should not fail in making residual plot.
-
+    
 VCF2PCP results for test data should be in the following file:
 ```
 VCF2PCP/test/results/VCF2PCP-results
