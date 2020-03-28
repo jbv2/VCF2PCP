@@ -6,6 +6,7 @@
 export PLINK2="plink2"
 export MAF="0.05"
 export THREADS_PLINK="4"
+export FAM_ID="NAT_AMR"
 ###
 
 echo "[>..] test running this module with data in test/data"

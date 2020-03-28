@@ -334,6 +334,7 @@ process _pre4_vcf2plink {
   export PLINK2="${params.plink2}"
 	export MAF="${params.maf}"
 	export THREADS_PLINK="${params.threads_plink}"
+	export FAM_ID="${params.fam_id}"
 	bash runmk.sh
 	"""
 
