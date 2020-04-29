@@ -556,6 +556,7 @@ process _post3_plot_admixture {
 
 	output:
 	file "*.svg"
+	file "*.tmp"
 	file "*.rds" into results_post3_plot_admixture
 
 	"""

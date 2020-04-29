@@ -4,6 +4,7 @@ library("tidyr")
 library("ggplot2")
 library("svglite")
 library("cowplot")
+library("ggsci")
 
 ## Read args from command line
 args = commandArgs(trailingOnly=TRUE)
@@ -14,7 +15,7 @@ args = commandArgs(trailingOnly=TRUE)
 # args[2] <- "4" ## $stem2 which is the number of K in the filename at args[1]
 # args[3] <- "test/data/sampleWGS.LD.maf_filtered.autosomal.4.admixture_plot.svg" ## %.svg file
 
- ## Passing args to named objects
+## Passing args to named objects
 proportions_file <- args[1]
 k_value <- args[2]
 output_file <- args[3]
@@ -45,7 +46,8 @@ myplotting_function <- function(data, kval, region_name) {
                        labels = paste0(seq(0,1,by = 0.2) * 100, "%"),
                        expand = c(0, 0)) +
     ggtitle(label = region_name) +
-    scale_fill_discrete(name = paste("K=",kval)) +
+    # scale_fill_discrete(name = paste("K=",kval)) +
+    scale_fill_npg(name = paste("K=",kval)) +
     theme_bw() +
     theme(
       text = element_text(size = 5),

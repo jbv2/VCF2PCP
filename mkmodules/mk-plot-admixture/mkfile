@@ -3,8 +3,7 @@ MKSHELL=/bin/bash
 
 (.*)\\.([0-9*])\\.admixture_plot\\.svg:QR: \\1\\.\\2\\.proportions.tmp
 	echo "[DEBUG] Plotting admixture results for $prereq"
-	Rscript --vanilla admixture_plotter.R $prereq $stem2 $target \
-	&& rm $prereq
+	Rscript --vanilla admixture_plotter.R $prereq $stem2 $target
 
 (.*)\\.([0-9*])\\.proportions\\.tmp:QR: \\1\\.popinfo.txt \\1\\.\\2\\.Q
 	echo "[DEBUG] pasting table for $prereq"
