@@ -10,12 +10,11 @@ MKSHELL=/bin/bash
 	--out $stem.LD.maf_filtered \
 	&& rm $stem.LD.converted.*
 
-## TO-DO (code revision) (iaguilar) - parameter --const-fid should be parametrized
 %.LD.converted.bed:Q: %.noLD.vcf
 	echo "[DEBUG] Converting vcf to plink file $prereq"
 	$PLINK2 --vcf $prereq \
 	--keep-allele-order \
-	--const-fid "NAT_AMR" \
+	--const-fid $FAM_ID \
 	--vcf-filter \
 	--vcf-half-call m \
 	--vcf-require-gt \
