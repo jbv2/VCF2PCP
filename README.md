@@ -58,13 +58,13 @@ To test VCF2PCP execution using test data, run:
 ./runtest.sh
 ```
    Your console should print the Nextflow log for the run, once every process has been submitted, the following message will appear:
-   
+
     ```
     ======
     vcf2pcp: Basic pipeline TEST SUCCESSFUL
     ======
     ```
-    
+
 VCF2PCP results for test data should be in the following file:
 ```
 VCF2PCP/test/results/VCF2PCP-results
@@ -189,4 +189,5 @@ If you have questions, requests, or bugs to report, please email
 Judith Ballesteros Villascán <judith.vballesteros@gmail.com>
 
 Israel Aguilar-Ordonez <iaguilaror@gmail.com>
-   
+
+Fernando Pérez-Villatoro <frpvillatoro@gmail.com>

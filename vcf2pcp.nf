@@ -17,7 +17,8 @@ Authors:
 
 - Bioinformatics Development
  Judith Ballesteros Villascán (judith.vballesteros@gmail.com)
-Israel Aguilar-Ordonez (iaguilaror@gmail)
+ Israel Aguilar-Ordonez (iaguilaror@gmail)
+ Fernando Pérez-Villatoro (frpvillatoro@gmail.com)
 
 - Nextflow Port
  Judith Ballesteros Villascán (judith.vballesteros@gmail.com)
