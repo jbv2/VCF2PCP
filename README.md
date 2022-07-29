@@ -191,3 +191,8 @@ Judith Ballesteros Villascán <judith.vballesteros@gmail.com>
 Israel Aguilar-Ordonez <iaguilaror@gmail.com>
 
 Fernando Pérez-Villatoro <frpvillatoro@gmail.com>
+
+### Cite us
+If you find this pipeline useful for your project, please cite us as:
+
+Aguilar-Ordoñez, Israel, et al. "Whole genome variation in 27 Mexican indigenous populations, demographic and biomedical insights." PloS one 16.4 (2021): e0249773.
